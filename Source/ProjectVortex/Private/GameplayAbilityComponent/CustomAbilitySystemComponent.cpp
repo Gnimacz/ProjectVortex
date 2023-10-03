@@ -5,49 +5,82 @@
 
 #include "ProjectVortex/Public/GameplayAbilities/CustomGameplayAbility.h"
 
+struct FPredictionKey;
+
 UCustomAbilitySystemComponent::UCustomAbilitySystemComponent()
 {
+}
+
+
+FGameplayAbilitySpec* UCustomAbilitySystemComponent::HasAbility(TSubclassOf<UGameplayAbility> AbilityToCheck)
+{
+	//loop through all the granted abilities and see if the ability is 
+	TArray<FGameplayAbilitySpecHandle> GrantedAbilities;
+	this->GetAllAbilities(GrantedAbilities);
+
+	FGameplayAbilitySpec* FoundAbilitySpec = nullptr;
+
+	for(const FGameplayAbilitySpecHandle handle : GrantedAbilities)
+	{
+		if(this->FindAbilitySpecFromHandle(handle)->Ability == AbilityToCheck->GetDefaultObject<UCustomGameplayAbility>())
+		{
+			FoundAbilitySpec = this->FindAbilitySpecFromHandle(handle);
+		}
+	}
+
+	return FoundAbilitySpec;
 	
 }
 
-bool UCustomAbilitySystemComponent::HasAbility(UAbilitySystemComponent* AbilitySystemComponent,
-	FGameplayAbilitySpecHandle Ability)
-{
-	for (FGameplayAbilitySpec Spec : AbilitySystemComponent->GetActivatableAbilities())
-	{
-		if (Spec.Handle == Ability)
-		{
-			return true;
-		}
-	}
-	return false;
-}
-
-bool UCustomAbilitySystemComponent::HasAbilityClass(TSubclassOf<UGameplayAbility> InAbility, FGameplayAbilitySpecHandle &OutAbilitySpecHandle)
+bool UCustomAbilitySystemComponent::HasAbilityClass(TSubclassOf<UGameplayAbility> AbilityToCheck,
+                                                    FGameplayAbilitySpecHandle& FoundAbilitySpecHandle)
 {
 	for (FGameplayAbilitySpec Spec : this->GetActivatableAbilities())
 	{
-		if (Spec.Ability == InAbility->GetDefaultObject<UCustomGameplayAbility>())
+		if (Spec.Ability == AbilityToCheck->GetDefaultObject<UCustomGameplayAbility>())
 		{
-			OutAbilitySpecHandle = Spec.Handle;
+			FoundAbilitySpecHandle = Spec.Handle;
 			return true;
 		}
 	}
 	return false;
 }
 
-// bool UCustomAbilitySystemComponent::HasAbility(UCustomAbilitySystemComponent* AbilitySystemComponent,
-//                                                FGameplayAbilitySpecHandle* Ability)
-// {
-// 	TArray<FGameplayAbilitySpecHandle> GrantedAbilities;
-// 	for (FGameplayAbilitySpecHandle* Spec : AbilitySystemComponent->GetAllAbilities(GrantedAbilities))
-// 	{
-// 		if (Spec == Ability)
-// 		{
-// 			return true;
-// 		}
-// 	}
-// 	return false;
-// }
+void UCustomAbilitySystemComponent::ActivateAbilityByClass(bool& WasReleased,
+                                                           TEnumAsByte<EBranchEnum> Activation,
+                                                           TSubclassOf<UGameplayAbility> AbilityToActivate,
+                                                           bool bAllowRemoteActivation)
+{
+	const FGameplayAbilitySpec* FoundAbilitySpec = HasAbility(AbilityToActivate);
+	
+	if(FoundAbilitySpec == nullptr)
+	{
+		UE_LOG(LogTemp, Error, TEXT("No Ability found! Please make sure your ability is granted!"));
+		return;
+	}
 
+	if (Activation == EBranchEnum::Pressed)
+	{
+		TryActivateAbility(FoundAbilitySpec->Handle, bAllowRemoteActivation);
+		UE_LOG(LogTemp, Warning, TEXT("Pressed"));
+		WasReleased = false;
+	}
+	else if (Activation == EBranchEnum::Released)
+	{
+		if (GetOwner()->GetLocalRole() == ROLE_Authority)
+		{
+			ServerEndAbility(FoundAbilitySpec->Handle, FoundAbilitySpec->ActivationInfo, FPredictionKey());
+			ClientEndAbility(FoundAbilitySpec->Handle, FoundAbilitySpec->ActivationInfo);
+			UE_LOG(LogTemp, Warning, TEXT("AUTHORITATIVE Released"));
+		}
+		else if (GetOwner()->GetLocalRole() != ROLE_Authority)
+		{
+			ClientEndAbility(FoundAbilitySpec->Handle, FoundAbilitySpec->ActivationInfo);
+			UE_LOG(LogTemp, Warning, TEXT("NOT AUTHORITATIVE Released"));
+		}
+		CancelAbilityHandle(FoundAbilitySpec->Handle);
 
+		UE_LOG(LogTemp, Warning, TEXT("Released"));
+		WasReleased = true;
+	}
+}

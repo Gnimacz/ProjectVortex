@@ -29,6 +29,11 @@ float UCustomGameplayAbility::GetModifiedAbilityStrength()
 	return BaseStrength;
 }
 
+void UCustomGameplayAbility::K2_EndAbility()
+{
+	Super::K2_EndAbility();
+}
+
 void UCustomGameplayAbility::OnAvatarSet(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec)
 {
 	Super::OnAvatarSet(ActorInfo, Spec);
