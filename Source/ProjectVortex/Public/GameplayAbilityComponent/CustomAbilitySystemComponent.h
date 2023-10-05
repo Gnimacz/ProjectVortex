@@ -45,6 +45,12 @@ public:
 
 	bool bDefaultEffectsApplied = false;
 
+	// UFUNCTION(BlueprintCallable, Category = "Ability System|Gameplay Cue", meta = (AutoCreateRefTerm = "GameplayCueParameters", AdvancedDisplay = "GameplayCueParameters", DisplayName = "AddGameplayCue"))
+	// void AddGameplayCue_Internal(const FGameplayTag GameplayCueTag, FGameplayEffectContextHandle& EffectContext, FActiveGameplayCueContainer& GameplayCueContainer) override;
+	// UFUNCTION(BlueprintCallable, Category = "Ability System|Gameplay Cue", meta = (AutoCreateRefTerm = "GameplayCueParameters", AdvancedDisplay = "GameplayCueParameters", DisplayName = "AddGameplayCue"))
+	// void AddGameplayCue_Internal(const FGameplayTag GameplayCueTag, const FGameplayCueParameters& GameplayCueParameters, FActiveGameplayCueContainer& GameplayCueContainer) override;
+	//
+
 	FGameplayAbilitySpec* HasAbility(TSubclassOf<UGameplayAbility> AbilityToCheck);
 	UFUNCTION(BlueprintCallable, Category = "Ability System")
 	bool HasAbilityClass(TSubclassOf<UGameplayAbility> AbilityToCheck,
