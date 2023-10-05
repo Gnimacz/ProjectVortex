@@ -84,3 +84,16 @@ void UCustomAbilitySystemComponent::ActivateAbilityByClass(bool& WasReleased,
 		WasReleased = true;
 	}
 }
+
+int UCustomAbilitySystemComponent::UpgradeAbility(TSubclassOf<UGameplayAbility> AbilityToUpgrade, int Level,
+	FGameplayAbilitySpecHandle& UpgradedAbilityHandle)
+{
+	FGameplayAbilitySpec* FoundAbilitySpec = HasAbility(AbilityToUpgrade);
+	if(FoundAbilitySpec == nullptr)
+	{
+		UE_LOG(LogTemp, Error, TEXT("No Ability found! Please make sure your ability is granted!"));
+		return -1;
+	}
+	FoundAbilitySpec->Level = Level;
+	return Level;
+}

@@ -20,6 +20,8 @@ APlayerStateBase::APlayerStateBase()
 	HealthAttributes = CreateDefaultSubobject<UHealthAttributeSet>(TEXT("HealthAttributes"));
 	
 	MovementSpeedAttributes = CreateDefaultSubobject<UMovementSpeedAttributeSet>(TEXT("MovementSpeedAttributes"));
+	
+	ManaAttributes = CreateDefaultSubobject<UManaAttributeSet>(TEXT("ManaAttributes"));
 }
 
 UAbilitySystemComponent* APlayerStateBase::GetAbilitySystemComponent() const

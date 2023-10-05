@@ -61,6 +61,10 @@ void UHealthAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCall
 		{
 			const float NewHealth = GetCurrentHealth() + LocalHealingDone;
 			SetCurrentHealth(FMath::Clamp(NewHealth, 0.0f, GetMaximumHealth()));
+			if(ACharacterBase* AvatarCharacter = Cast<ACharacterBase>(Data.Target.GetAvatarActor()))
+			{
+				AvatarCharacter->OnHeal();
+			}
 		}
 	}
 	else if(Data.EvaluatedData.Attribute == GetCurrentHealthAttribute())

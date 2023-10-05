@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "AbilitySystemInterface.h"
 #include "Attribute_Sets/HealthAttributeSet.h"
+#include "Attribute_Sets/ManaAttributeSet.h"
 #include "Attribute_Sets/MovementSpeedAttributeSet.h"
 #include "GameFramework/PlayerState.h"
 #include "PlayerStateBase.generated.h"
@@ -33,5 +34,8 @@ public:
 
 	UPROPERTY(BlueprintReadOnly, Category = "Ability System")
 	UMovementSpeedAttributeSet* MovementSpeedAttributes;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Ability System")
+	UManaAttributeSet* ManaAttributes;
 
 };

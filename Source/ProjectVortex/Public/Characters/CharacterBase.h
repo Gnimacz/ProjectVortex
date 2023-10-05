@@ -27,12 +27,28 @@ public:
 
 	void OnDeath();
 	void OnDamage();
+	void OnHeal();
+	void OnManaEmpty();
+	void OnManaDrain();
+	void OnManaRegen();
 	
 	UFUNCTION(BlueprintImplementableEvent, Category = "Character Base")
 	void On_Death();
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "Character Base")
 	void On_Damage();
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Character Base")
+	void On_Heal();
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Character Base")
+	void On_Mana_Drain();
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Character Base")
+	void On_Mana_Depleted();
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Character Base")
+	void On_Mana_Regeneration();
 	
 protected:
 

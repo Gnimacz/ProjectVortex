@@ -57,4 +57,7 @@ public:
 		meta = (ExpandEnumAsExecs = "Activation", ExpandBoolAsExecs = "WasReleased"))
 	void ActivateAbilityByClass(bool& WasReleased, TEnumAsByte<EBranchEnum> Activation,
 	                            TSubclassOf<UGameplayAbility> AbilityToActivate, bool bAllowRemoteActivation = true);
+
+	UFUNCTION(BlueprintCallable, Category = "Ability System")
+	int UpgradeAbility(TSubclassOf<UGameplayAbility> AbilityToUpgrade, int Level , FGameplayAbilitySpecHandle& UpgradedAbilityHandle);
 };
