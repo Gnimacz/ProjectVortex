@@ -56,6 +56,8 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Custom Gameplay Ability|Modifiers")
 	float GetModifiedAbilityStrength();
 
+	virtual void K2_EndAbility() override;
+
 protected:
 	virtual void OnAvatarSet(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec) override;
 	

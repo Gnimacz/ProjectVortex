@@ -33,6 +33,26 @@ void ACharacterBase::OnDamage()
 	On_Damage();
 }
 
+void ACharacterBase::OnHeal()
+{
+	On_Heal();
+}
+
+void ACharacterBase::OnManaRegen()
+{
+	On_Mana_Regeneration();
+}
+
+void ACharacterBase::OnManaEmpty()
+{
+	On_Mana_Depleted();
+}
+
+void ACharacterBase::OnManaDrain()
+{
+	On_Mana_Drain();
+}
+
 void ACharacterBase::GiveDefaultAbilities()
 {
 	if(AbilitySystemComponent->bDefaultabilitiesGiven || GetLocalRole() != ROLE_Authority)
