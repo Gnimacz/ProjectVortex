@@ -39,9 +39,9 @@ class PROJECTVORTEX_API UCustomGameplayAbility : public UGameplayAbility
 public:
 	UCustomGameplayAbility();
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Ability Input")
-	UInputAction* AbilityInputAction;
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Ability Input")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Ability Input")
+	int AbilityID = 0;
+	// UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Ability Input")
 	EGameplayAbilityBindings InputBinding = EGameplayAbilityBindings::None;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Ability Input")
@@ -55,6 +55,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Custom Gameplay Ability|Modifiers")
 	float GetModifiedAbilityStrength();
+
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Custom Gameplay Ability")
+	int GetAbilityID() const { return AbilityID; }
 
 	virtual void K2_EndAbility() override;
 
