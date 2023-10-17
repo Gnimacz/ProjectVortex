@@ -49,8 +49,12 @@ bool UCustomAbilitySystemComponent::HasAbilityClass(TSubclassOf<UGameplayAbility
 void UCustomAbilitySystemComponent::ActivateAbilityByClass(bool& WasReleased,
                                                            TEnumAsByte<EBranchEnum> Activation,
                                                            TSubclassOf<UGameplayAbility> AbilityToActivate,
-                                                           bool bAllowRemoteActivation)
+                                                           bool bAllowRemoteActivation, bool bGiveAbility)
 {
+	if(bGiveAbility && HasAbility(AbilityToActivate) == nullptr)
+	{
+		GiveAbility(FGameplayAbilitySpec(AbilityToActivate->GetDefaultObject<UCustomGameplayAbility>(), 1, INDEX_NONE, this));
+	}
 	const FGameplayAbilitySpec* FoundAbilitySpec = HasAbility(AbilityToActivate);
 	
 	if(FoundAbilitySpec == nullptr)
