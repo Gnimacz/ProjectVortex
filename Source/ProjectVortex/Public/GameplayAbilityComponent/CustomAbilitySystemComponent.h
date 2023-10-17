@@ -62,7 +62,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Ability System",
 		meta = (ExpandEnumAsExecs = "Activation", ExpandBoolAsExecs = "WasReleased"))
 	void ActivateAbilityByClass(bool& WasReleased, TEnumAsByte<EBranchEnum> Activation,
-	                            TSubclassOf<UGameplayAbility> AbilityToActivate, bool bAllowRemoteActivation = true);
+	                            TSubclassOf<UGameplayAbility> AbilityToActivate, bool bAllowRemoteActivation = true, bool bGiveAbility = false);
 
 	UFUNCTION(BlueprintCallable, Category = "Ability System")
 	int UpgradeAbility(TSubclassOf<UGameplayAbility> AbilityToUpgrade, int Level , FGameplayAbilitySpecHandle& UpgradedAbilityHandle);
