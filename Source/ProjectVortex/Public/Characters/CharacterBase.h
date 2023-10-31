@@ -8,6 +8,8 @@
 #include "GameFramework/Character.h"
 #include "CharacterBase.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHealthChangedDelegate, float, Health);
+
 UCLASS(Abstract, NotBlueprintable)
 class PROJECTVORTEX_API ACharacterBase : public ACharacter, public IAbilitySystemInterface
 {
@@ -19,6 +21,9 @@ public:
 
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
+	UPROPERTY(BlueprintAssignable, Category = "GAS")
+	FOnHealthChangedDelegate OnHealthChangedDelegate;
+	
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "GAS")
 	TArray<TSubclassOf<class UCustomGameplayAbility>> DefaultAbilities;
 

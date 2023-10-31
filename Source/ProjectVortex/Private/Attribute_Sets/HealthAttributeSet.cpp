@@ -48,6 +48,7 @@ void UHealthAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCall
 			else if(ACharacterBase* AvatarCharacter = Cast<ACharacterBase>(Data.Target.GetAvatarActor()))
 			{
 				AvatarCharacter->OnDamage();
+				AvatarCharacter->OnHealthChangedDelegate.Broadcast(GetCurrentHealth());
 			}
 		}
 	}
