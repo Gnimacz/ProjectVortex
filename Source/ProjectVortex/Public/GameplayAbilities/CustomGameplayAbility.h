@@ -59,6 +59,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Custom Gameplay Ability")
 	int GetAbilityID() const { return AbilityID; }
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Custom Gameplay Ability|Tags")
+	FGameplayTagContainer DamageTags;
+
 	virtual void K2_EndAbility() override;
 
 protected:
