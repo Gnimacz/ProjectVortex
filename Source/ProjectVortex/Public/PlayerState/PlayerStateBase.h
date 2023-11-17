@@ -31,11 +31,10 @@ public:
 
 	UPROPERTY(BlueprintReadOnly, Category = "Ability System")
 	UHealthAttributeSet* HealthAttributes;
-
+	
 	UPROPERTY(BlueprintReadOnly, Category = "Ability System")
 	UMovementSpeedAttributeSet* MovementSpeedAttributes;
-
+	
 	UPROPERTY(BlueprintReadOnly, Category = "Ability System")
 	UManaAttributeSet* ManaAttributes;
-
 };

@@ -8,7 +8,16 @@
 #include "GameFramework/Character.h"
 #include "CharacterBase.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHealthChangedDelegate, float, Health);
+UENUM(BlueprintType)
+enum ManaType
+{
+	Water UMETA(DisplayName = "Water"),
+	Fire UMETA(DisplayName = "Fire"),
+	Air UMETA(DisplayName = "Air"),
+	Earth UMETA(DisplayName = "Earth"),
+	Lightning UMETA(DisplayName = "Lightning"),
+	Ice UMETA(DisplayName = "Ice")
+};
 
 UCLASS(Abstract, NotBlueprintable)
 class PROJECTVORTEX_API ACharacterBase : public ACharacter, public IAbilitySystemInterface
@@ -20,9 +29,6 @@ public:
 	ACharacterBase();
 
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
-
-	UPROPERTY(BlueprintAssignable, Category = "GAS")
-	FOnHealthChangedDelegate OnHealthChangedDelegate;
 	
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "GAS")
 	TArray<TSubclassOf<class UCustomGameplayAbility>> DefaultAbilities;
@@ -33,9 +39,9 @@ public:
 	void OnDeath();
 	void OnDamage();
 	void OnHeal();
-	void OnManaEmpty();
-	void OnManaDrain();
-	void OnManaRegen();
+	void OnManaEmpty(ManaType Type);
+	void OnManaDrain(ManaType Type, float Amount);
+	void OnManaRegen(ManaType Type, float Amount);
 	
 	UFUNCTION(BlueprintImplementableEvent, Category = "Character Base")
 	void On_Death();
@@ -47,13 +53,13 @@ public:
 	void On_Heal();
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "Character Base")
-	void On_Mana_Drain();
+	void On_Mana_Drain(ManaType Type, float Amount);
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "Character Base")
-	void On_Mana_Depleted();
+	void On_Mana_Depleted(ManaType Type);
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "Character Base")
-	void On_Mana_Regeneration();
+	void On_Mana_Regeneration(ManaType Type, float Amount);
 	
 protected:
 

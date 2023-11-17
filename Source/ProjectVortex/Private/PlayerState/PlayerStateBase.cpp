@@ -9,7 +9,7 @@
 
 APlayerStateBase::APlayerStateBase()
 {
-		NetUpdateFrequency = 60.0f;
+	NetUpdateFrequency = 60.0f;
 
 	AbilitySystemComponent = CreateDefaultSubobject<UCustomAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
 	AbilitySystemComponent->SetIsReplicated(true);
@@ -22,6 +22,8 @@ APlayerStateBase::APlayerStateBase()
 	MovementSpeedAttributes = CreateDefaultSubobject<UMovementSpeedAttributeSet>(TEXT("MovementSpeedAttributes"));
 	
 	ManaAttributes = CreateDefaultSubobject<UManaAttributeSet>(TEXT("ManaAttributes"));
+
+	
 }
 
 UAbilitySystemComponent* APlayerStateBase::GetAbilitySystemComponent() const
