@@ -21,7 +21,7 @@ void APlayerCharacter::PossessedBy(AController* NewController)
 
 		HealthAttributes = PlayerStateBase->HealthAttributes;
 		MovementSpeedAttributes = PlayerStateBase->MovementSpeedAttributes;
-		// MovementSpeedAttributes = PlayerStateBase->MovementSpeedAttributes;		
+		MovementSpeedAttributes = PlayerStateBase->MovementSpeedAttributes;		
 
 		GiveDefaultAbilities();
 

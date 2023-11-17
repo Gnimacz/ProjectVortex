@@ -38,19 +38,19 @@ void ACharacterBase::OnHeal()
 	On_Heal();
 }
 
-void ACharacterBase::OnManaRegen()
+void ACharacterBase::OnManaRegen(ManaType Type, float Amount)
 {
-	On_Mana_Regeneration();
+	On_Mana_Regeneration(Type, Amount);
 }
 
-void ACharacterBase::OnManaEmpty()
+void ACharacterBase::OnManaEmpty(ManaType Type)
 {
-	On_Mana_Depleted();
+	On_Mana_Depleted(Type);
 }
 
-void ACharacterBase::OnManaDrain()
+void ACharacterBase::OnManaDrain(ManaType Type, float Amount)
 {
-	On_Mana_Drain();
+	On_Mana_Drain(Type, Amount);
 }
 
 void ACharacterBase::GiveDefaultAbilities()
