@@ -12,12 +12,12 @@
 /**
  * 
  */
-USTRUCT()
-struct FGameplayEffectCancelInfo
+USTRUCT(BlueprintType)
+struct FGameplayEffectApplyParams
 {
 	GENERATED_BODY()
-	FGameplayTagRequirements TagRequirements;
-	TArray<FGameplayEffectCue> Cue;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GameplayEffect")
+	TMap<FGameplayTag, float> Params;
 };
 
 /**
@@ -58,4 +58,7 @@ private:
 public:
 	UPROPERTY(EditDefaultsOnly, Category = Tags)
 	FGameplayTagRequirements CancelTagRequirements;
+	UPROPERTY(EditDefaultsOnly, Category = Effects)
+	// TArray<TSubclassOf<UGameplayEffect>> Effects;
+	TMap<TSubclassOf<UGameplayEffect>, FGameplayEffectApplyParams> EffectsMap;
 };
