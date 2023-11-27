@@ -95,6 +95,9 @@ bool UCancelOut::OnActiveGameplayEffectAdded(FActiveGameplayEffectsContainer& GE
 		for (auto Element : CancelTagRequirements.TagQuery.GetGameplayTagArray())
 		{
 			GEContainer.Owner->RemoveActiveEffectsWithTags(FGameplayTagContainer(Element));
+			GEContainer.Owner->RemoveActiveEffectsWithAppliedTags(FGameplayTagContainer(Element));
+			GEContainer.Owner->RemoveActiveEffectsWithGrantedTags(FGameplayTagContainer(Element));
+			GEContainer.Owner->RemoveActiveEffectsWithSourceTags(FGameplayTagContainer(Element));
 		}
 
 		//Add the effects from the effects map
