@@ -58,6 +58,8 @@ private:
 public:
 	UPROPERTY(EditDefaultsOnly, Category = Tags)
 	FGameplayTagRequirements CancelTagRequirements;
+	UPROPERTY(EditDefaultsOnly, Category = Tags)
+	TArray<FGameplayEffectQuery> CancelEffectRequirements;
 	UPROPERTY(EditDefaultsOnly, Category = Effects)
 	// TArray<TSubclassOf<UGameplayEffect>> Effects;
 	TMap<TSubclassOf<UGameplayEffect>, FGameplayEffectApplyParams> EffectsMap;

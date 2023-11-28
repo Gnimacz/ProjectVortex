@@ -8,7 +8,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Misc/DataValidation.h"
 
-#define LOCTEXT_NAMESPACE "TargetTagRequirementsGameplayEffectComponent"
+#define LOCTEXT_NAMESPACE "CancelOutGameplayEffectComponent"
 
 UCancelOut::UCancelOut()
 {
@@ -22,7 +22,6 @@ bool UCancelOut::CanGameplayEffectApply(const FActiveGameplayEffectsContainer& A
 {
 	FGameplayTagContainer Tags;
 	ActiveGEContainer.Owner->GetOwnedGameplayTags(Tags);
-
 
 	return true;
 }
@@ -91,7 +90,10 @@ bool UCancelOut::OnActiveGameplayEffectAdded(FActiveGameplayEffectsContainer& GE
 	ASC->GetOwnedGameplayTags(TagContainer);
 	if (!CancelTagRequirements.IsEmpty() && CancelTagRequirements.RequirementsMet(TagContainer) == true)
 	{
-		GEContainer.Owner->RemoveActiveGameplayEffect(ActiveGEHandle);
+		for (auto Element : CancelEffectRequirements)
+		{
+			GEContainer.Owner->RemoveActiveEffects(Element, -1);	
+		}
 		for (auto Element : CancelTagRequirements.TagQuery.GetGameplayTagArray())
 		{
 			GEContainer.Owner->RemoveActiveEffectsWithTags(FGameplayTagContainer(Element));
@@ -113,6 +115,8 @@ bool UCancelOut::OnActiveGameplayEffectAdded(FActiveGameplayEffectsContainer& GE
 				GEContainer.Owner->ApplyGameplayEffectSpecToSelf(*SpecHandleToApply.Data.Get());
 			}
 		}
+
+		GEContainer.Owner->RemoveActiveGameplayEffect(ActiveGEHandle);
 	}
 
 	return true;
@@ -152,14 +156,29 @@ void UCancelOut::OnTagChanged(const FGameplayTag GameplayTag, int32 NewCount,
 			RequirementsMet(OwnedTags);
 		if (bCancelRequirementsMet)
 		{
-			// This is slightly different functionality from pre-UE5.3, we're calling RemoveActiveGameplayEffect rather than InternalRemoveActiveGameplayEffect.
-			// The result is we set the calculated magnitudes back to zero.  This also used to only run on the Server.
-			Owner->RemoveActiveGameplayEffect(ActiveGEHandle);
 			for (auto Element : CancelTagRequirements.TagQuery.GetGameplayTagArray())
 			{
 				Owner->RemoveActiveEffectsWithTags(FGameplayTagContainer(Element));
+				Owner->RemoveActiveEffectsWithAppliedTags(FGameplayTagContainer(Element));
+				Owner->RemoveActiveEffectsWithGrantedTags(FGameplayTagContainer(Element));
+				Owner->RemoveActiveEffectsWithSourceTags(FGameplayTagContainer(Element));
 			}
-			// Owner->RemoveActiveEffectsWithTags(CancelTagRequirements.RequireTags);
+
+			//Add the effects from the effects map
+			if(!EffectsMap.IsEmpty())
+			{
+				for (auto Element : EffectsMap)
+				{
+					FGameplayEffectSpecHandle SpecHandleToApply = Owner->MakeOutgoingSpec(Element.Key, 0, Owner->MakeEffectContext());
+					for (auto Element2 : Element.Value.Params)
+					{
+						SpecHandleToApply.Data->SetSetByCallerMagnitude(Element2.Key, Element2.Value);
+					}
+					Owner->ApplyGameplayEffectSpecToSelf(*SpecHandleToApply.Data.Get());
+				}
+			}
+
+			Owner->RemoveActiveGameplayEffect(ActiveGEHandle);
 		}
 	}
 }
