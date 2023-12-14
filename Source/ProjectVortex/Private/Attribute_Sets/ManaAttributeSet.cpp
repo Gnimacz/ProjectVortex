@@ -71,7 +71,7 @@ void UManaAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 	}
 	else if (Data.EvaluatedData.Attribute == GetCurrentEarthManaAttribute())
 	{
-		SetCurrentWaterMana(FMath::Clamp(GetCurrentEarthMana(), 0.0f, GetMaximumEarthMana()));
+		SetCurrentEarthMana(FMath::Clamp(GetCurrentEarthMana(), 0.0f, GetMaximumEarthMana()));
 		if (ACharacterBase* AvatarCharacter = Cast<ACharacterBase>(Data.Target.GetAvatarActor()))
 		{
 			if (globalNewValue > 0)
@@ -90,7 +90,7 @@ void UManaAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 	}
 	else if (Data.EvaluatedData.Attribute == GetCurrentFireManaAttribute())
 	{
-		SetCurrentWaterMana(FMath::Clamp(GetCurrentFireMana(), 0.0f, GetMaximumFireMana()));
+		SetCurrentFireMana(FMath::Clamp(GetCurrentFireMana(), 0.0f, GetMaximumFireMana()));
 		if (ACharacterBase* AvatarCharacter = Cast<ACharacterBase>(Data.Target.GetAvatarActor()))
 		{
 			if (globalNewValue > 0)
@@ -109,7 +109,7 @@ void UManaAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 	}
 	else if (Data.EvaluatedData.Attribute == GetCurrentAirManaAttribute())
 	{
-		SetCurrentWaterMana(FMath::Clamp(GetCurrentAirMana(), 0.0f, GetMaximumAirMana()));
+		SetCurrentAirMana(FMath::Clamp(GetCurrentAirMana(), 0.0f, GetMaximumAirMana()));
 		if (ACharacterBase* AvatarCharacter = Cast<ACharacterBase>(Data.Target.GetAvatarActor()))
 		{
 			if (globalNewValue > 0)

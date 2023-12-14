@@ -2,7 +2,7 @@
 
 
 #include "ProjectVortex/Public/GameplayAbilityComponent/CustomAbilitySystemComponent.h"
-
+#include "algorithm"
 #include "ProjectVortex/Public/GameplayAbilities/CustomGameplayAbility.h"
 
 struct FPredictionKey;
@@ -19,7 +19,7 @@ FGameplayAbilitySpec* UCustomAbilitySystemComponent::HasAbility(TSubclassOf<UGam
 	this->GetAllAbilities(GrantedAbilities);
 
 	FGameplayAbilitySpec* FoundAbilitySpec = nullptr;
-
+	
 	for(const FGameplayAbilitySpecHandle handle : GrantedAbilities)
 	{
 		if(this->FindAbilitySpecFromHandle(handle)->Ability == AbilityToCheck->GetDefaultObject<UCustomGameplayAbility>())
