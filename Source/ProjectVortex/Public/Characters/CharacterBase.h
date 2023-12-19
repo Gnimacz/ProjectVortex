@@ -40,8 +40,8 @@ public:
 	void OnDamage();
 	void OnHeal();
 	void OnManaEmpty(ManaType Type);
-	void OnManaDrain(ManaType Type, float Amount);
-	void OnManaRegen(ManaType Type, float Amount);
+	void OnManaDrain(ManaType Type, float Delta, float NewAmount);
+	void OnManaRegen(ManaType Type, float Delta, float NewAmount);
 	
 	UFUNCTION(BlueprintImplementableEvent, Category = "Character Base")
 	void On_Death();
@@ -53,13 +53,13 @@ public:
 	void On_Heal();
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "Character Base")
-	void On_Mana_Drain(ManaType Type, float Amount);
+	void On_Mana_Drain(ManaType Type, float Delta, float NewAmount);
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "Character Base")
 	void On_Mana_Depleted(ManaType Type);
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "Character Base")
-	void On_Mana_Regeneration(ManaType Type, float Amount);
+	void On_Mana_Regeneration(ManaType Type, float Delta, float NewAmount);
 	
 protected:
 

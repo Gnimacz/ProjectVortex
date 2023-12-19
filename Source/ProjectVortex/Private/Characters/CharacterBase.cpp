@@ -38,9 +38,9 @@ void ACharacterBase::OnHeal()
 	On_Heal();
 }
 
-void ACharacterBase::OnManaRegen(ManaType Type, float Amount)
+void ACharacterBase::OnManaRegen(ManaType Type, float Delta, float NewAmount)
 {
-	On_Mana_Regeneration(Type, Amount);
+	On_Mana_Regeneration(Type,Delta, NewAmount);
 }
 
 void ACharacterBase::OnManaEmpty(ManaType Type)
@@ -48,9 +48,9 @@ void ACharacterBase::OnManaEmpty(ManaType Type)
 	On_Mana_Depleted(Type);
 }
 
-void ACharacterBase::OnManaDrain(ManaType Type, float Amount)
+void ACharacterBase::OnManaDrain(ManaType Type, float Delta, float NewAmount)
 {
-	On_Mana_Drain(Type, Amount);
+	On_Mana_Drain(Type,Delta, NewAmount);
 }
 
 void ACharacterBase::GiveDefaultAbilities()

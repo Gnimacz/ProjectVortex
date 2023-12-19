@@ -5,7 +5,9 @@
 #include "ProjectVortex/Public/Characters/CharacterBase.h"
 #include "Net/UnrealNetwork.h"
 
-float globalNewValue = 0;
+float globalNewValue;
+float oldValue;
+float delta = 0;
 
 UManaAttributeSet::UManaAttributeSet()
 {
@@ -28,6 +30,27 @@ void UManaAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, 
 	Super::PreAttributeChange(Attribute, NewValue);
 	globalNewValue = NewValue;
 
+	if(Attribute == GetCurrentWaterManaAttribute())
+	{
+		oldValue = GetCurrentWaterMana();
+		delta = NewValue - oldValue;
+	}
+	else if(Attribute == GetCurrentEarthManaAttribute())
+	{
+		oldValue = GetCurrentEarthMana();
+		delta = NewValue - oldValue;
+	}
+	else if(Attribute == GetCurrentFireManaAttribute())
+	{
+		oldValue = GetCurrentFireMana();
+		delta = NewValue - oldValue;
+	}
+	else if(Attribute == GetCurrentAirManaAttribute())
+	{
+		oldValue = GetCurrentAirMana();
+		delta = NewValue - oldValue;
+	}
+
 	if (Attribute == GetMaximumWaterManaAttribute())
 	{
 		AdjustAttributeForMaxChange(CurrentWaterMana, MaximumWaterMana, NewValue, GetCurrentWaterManaAttribute());
@@ -49,21 +72,20 @@ void UManaAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, 
 void UManaAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
 {
 	Super::PostGameplayEffectExecute(Data);
-
 	if (Data.EvaluatedData.Attribute == GetCurrentWaterManaAttribute())
 	{
 		SetCurrentWaterMana(FMath::Clamp(GetCurrentWaterMana(), 0.0f, GetMaximumWaterMana()));
 		if (ACharacterBase* AvatarCharacter = Cast<ACharacterBase>(Data.Target.GetAvatarActor()))
 		{
-			if (globalNewValue > 0)
+			if (delta > 0)
 			{
-				AvatarCharacter->OnManaRegen(ManaType::Water, globalNewValue);
+				AvatarCharacter->OnManaRegen(ManaType::Water, delta, globalNewValue);
 			}
-			else if(globalNewValue <= 0)
+			if (globalNewValue <= 0)
 			{
-				AvatarCharacter->OnManaDrain(ManaType::Water, FMath::Abs(globalNewValue));
+				AvatarCharacter->OnManaDrain(ManaType::Water, delta, globalNewValue);
 			}
-			else if(GetCurrentWaterMana() <= 0.0f)
+			if (GetCurrentWaterMana() <= 0.0f)
 			{
 				AvatarCharacter->OnManaEmpty(ManaType::Water);
 			}
@@ -74,15 +96,15 @@ void UManaAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 		SetCurrentEarthMana(FMath::Clamp(GetCurrentEarthMana(), 0.0f, GetMaximumEarthMana()));
 		if (ACharacterBase* AvatarCharacter = Cast<ACharacterBase>(Data.Target.GetAvatarActor()))
 		{
-			if (globalNewValue > 0)
+			if (delta > 0)
 			{
-				AvatarCharacter->OnManaRegen(ManaType::Earth, globalNewValue);
+				AvatarCharacter->OnManaRegen(ManaType::Earth, delta, globalNewValue);
 			}
-			else if(globalNewValue <= 0)
+			if (delta <= 0)
 			{
-				AvatarCharacter->OnManaDrain(ManaType::Earth, FMath::Abs(globalNewValue));
+				AvatarCharacter->OnManaDrain(ManaType::Earth, delta, globalNewValue);
 			}
-			else if(GetCurrentEarthMana() <= 0.0f)
+			if (GetCurrentEarthMana() <= 0.0f)
 			{
 				AvatarCharacter->OnManaEmpty(ManaType::Earth);
 			}
@@ -93,15 +115,15 @@ void UManaAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 		SetCurrentFireMana(FMath::Clamp(GetCurrentFireMana(), 0.0f, GetMaximumFireMana()));
 		if (ACharacterBase* AvatarCharacter = Cast<ACharacterBase>(Data.Target.GetAvatarActor()))
 		{
-			if (globalNewValue > 0)
+			if (delta > 0)
 			{
-				AvatarCharacter->OnManaRegen(ManaType::Fire, globalNewValue);
+				AvatarCharacter->OnManaRegen(ManaType::Fire, delta, globalNewValue);
 			}
-			else if(globalNewValue <= 0)
+			if (delta <= 0)
 			{
-				AvatarCharacter->OnManaDrain(ManaType::Fire, FMath::Abs(globalNewValue));
+				AvatarCharacter->OnManaDrain(ManaType::Fire, delta, globalNewValue);
 			}
-			else if(GetCurrentFireMana() <= 0.0f)
+			if (GetCurrentFireMana() <= 0.0f)
 			{
 				AvatarCharacter->OnManaEmpty(ManaType::Fire);
 			}
@@ -112,20 +134,23 @@ void UManaAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 		SetCurrentAirMana(FMath::Clamp(GetCurrentAirMana(), 0.0f, GetMaximumAirMana()));
 		if (ACharacterBase* AvatarCharacter = Cast<ACharacterBase>(Data.Target.GetAvatarActor()))
 		{
-			if (globalNewValue > 0)
+			if (delta > 0)
 			{
-				AvatarCharacter->OnManaRegen(ManaType::Air, globalNewValue);
+				AvatarCharacter->OnManaRegen(ManaType::Air, delta, globalNewValue);
 			}
-			else if(globalNewValue <= 0)
+			if (delta <= 0)
 			{
-				AvatarCharacter->OnManaDrain(ManaType::Air, FMath::Abs(globalNewValue));
+				AvatarCharacter->OnManaDrain(ManaType::Air, delta, globalNewValue);
 			}
-			if(GetCurrentAirMana() <= 0.0f)
+			if (GetCurrentAirMana() <= 0.0f)
 			{
 				AvatarCharacter->OnManaEmpty(ManaType::Air);
 			}
 		}
 	}
+
+	// UE_LOG(LogTemp, Warning, TEXT("PostAttributeChange: %f"), oldValue);
+	
 #pragma region not used
 	// if(Data.EvaluatedData.Attribute == GetManaDrainAttribute())
 	// {
